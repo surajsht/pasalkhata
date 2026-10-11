@@ -5,7 +5,7 @@ import ProductItemMobile from "./ProductItemMobile";
 const Products = () => {
   return (
     <div className="lg:border-2 lg:border-border lg:p-4">
-      <div className="sm:flex sm:items-center sm:justify-between sm:gap-2 pb-2 mb-2 border-b-2">
+      <div className="sm:flex sm:items-center sm:justify-between sm:gap-2 mb-4">
         <div className="mb-2 sm:mb-0">
           <h2 className="text-xl font-semibold"> All Products </h2>
           <p className="text-gray-800"> View and manage your inventory </p>
@@ -14,19 +14,21 @@ const Products = () => {
         <span> 200 products </span>
       </div>
 
-      <table className="hidden lg:block">
-        <tbody>
-          <tr>
-            <th> Product </th>
-            <th> SKU </th>
-            <th> Category </th>
-            <th> Price </th>
-            <th> Stock </th>
-            <th> Status </th>
-            <th> Last Updated </th>
-            <th> Actions </th>
+      <table className="hidden lg:block border-2">
+        <thead className="block py-3 border-b-2">
+          <tr className="flex items-center justify-between">
+            <th className="w-[25%] text-sm"> Product </th>
+            <th className="flex-1 text-sm"> SKU </th>
+            <th className="flex-1 text-sm"> Category </th>
+            <th className="flex-1 text-sm"> Price </th>
+            <th className="flex-1 text-sm"> Stock </th>
+            <th className="flex-1 text-sm"> Status </th>
+            <th className="flex-1 text-sm"> Last Updated </th>
+            <th className="flex-1 text-sm"> Actions </th>
           </tr>
+        </thead>
 
+        <tbody className="block">
           {ProductData.map((product) => {
             return <ProductItem key={product.id} product={product} />;
           })}
