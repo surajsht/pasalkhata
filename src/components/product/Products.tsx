@@ -1,8 +1,26 @@
-import ProductData from "../../TempData";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "../../utils/supabase";
 import ProductItem from "./ProductItem";
 import ProductItemMobile from "./ProductItemMobile";
 
+const fetchProducts = async () => {
+  const { data, error } = await supabase.from("inventory-products").select("*");
+
+  if (error) throw new Error(error.message);
+
+  return data;
+};
+
 const Products = () => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["inventory-products"],
+    queryFn: fetchProducts,
+  });
+
+  if (isLoading) return <h2> Loading... </h2>;
+
+  if (isError) return <h2> Error: {error.message} </h2>;
+
   return (
     <div className="lg:border-2 lg:border-border lg:p-4">
       <div className="sm:flex sm:items-center sm:justify-between sm:gap-2 mb-4">
@@ -29,14 +47,14 @@ const Products = () => {
         </thead>
 
         <tbody className="block">
-          {ProductData.map((product) => {
+          {data?.map((product) => {
             return <ProductItem key={product.id} product={product} />;
           })}
         </tbody>
       </table>
 
       <ul className="sm:grid sm:grid-cols-2 sm:gap-4 space-y-6 sm:space-y-0 lg:hidden">
-        {ProductData.map((product) => {
+        {data?.map((product) => {
           return <ProductItemMobile key={product.id} product={product} />;
         })}
       </ul>

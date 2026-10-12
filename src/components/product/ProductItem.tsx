@@ -21,7 +21,7 @@ const ProductItem = ({ product }: ProductItemType) => {
   }
 
   return (
-    <tr className="flex items-center justify-between p-2 border-b-2 last:border-b-2">
+    <tr className="flex items-center justify-between p-2 border-b-2 last:border-b-0">
       <td className="flex items-center gap-3 w-[25%] text-sm">
         <img
           src={product.image_url}
