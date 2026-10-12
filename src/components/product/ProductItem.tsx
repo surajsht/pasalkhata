@@ -21,8 +21,8 @@ const ProductItem = ({ product }: ProductItemType) => {
   }
 
   return (
-    <tr className="flex items-center justify-between p-2 border-b-2 last:border-b-0">
-      <td className="flex items-center gap-3 w-[25%] text-sm">
+    <tr className="p-2">
+      <td className="w-full p-3 text-left text-sm flex items-center gap-3">
         <img
           src={product.image_url}
           alt="product image"
@@ -31,13 +31,13 @@ const ProductItem = ({ product }: ProductItemType) => {
         />
         <span className="font-semibold"> {product.name} </span>
       </td>
-      <td className="flex-1 text-center text-sm"> {product.sku} </td>
-      <td className="flex-1 text-center text-sm"> {product.category} </td>
-      <td className="flex-1 text-center text-sm"> Rs.{product.price} </td>
-      <td className="flex-1 text-center text-sm"> {product.stock} unit </td>
-      <td className="flex-1 text-center text-sm">{stockStatus}</td>
-      <td className="flex-1 text-center text-sm"> {product.updated_at} </td>
-      <td className="flex-1 text-center text-sm">
+      <td className="w-[12%] p-3 text-left text-sm"> {product.sku} </td>
+      <td className="w-[12%] p-3 text-left text-sm"> {product.category} </td>
+      <td className="w-[10%] p-3 text-left text-sm"> Rs.{product.price} </td>
+      <td className="w-[8%] p-3 text-left text-sm"> {product.stock} unit </td>
+      <td className="w-[11%] p-3 text-left text-sm">{stockStatus}</td>
+      <td className="w-[12%] p-3 text-left text-sm"> {product.updated_at} </td>
+      <td className="w-[10%] p-3 text-left text-sm">
         <button>
           <BsThreeDots />
         </button>

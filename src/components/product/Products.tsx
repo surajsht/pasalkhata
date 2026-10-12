@@ -1,25 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "../../utils/supabase";
 import ProductItem from "./ProductItem";
 import ProductItemMobile from "./ProductItemMobile";
-
-const fetchProducts = async () => {
-  const { data, error } = await supabase.from("inventory-products").select("*");
-
-  if (error) throw new Error(error.message);
-
-  return data;
-};
+import CardLoader from "../skeleton-loader/CardLoader";
+import TableLoader from "../skeleton-loader/TableLoader";
+import ErrorMessage from "../ErrorMessage";
+import useProducts from "../hooks/useProducts";
 
 const Products = () => {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["inventory-products"],
-    queryFn: fetchProducts,
-  });
+  const { data, isLoading, isError, error, refetch } = useProducts();
 
-  if (isLoading) return <h2> Loading... </h2>;
-
-  if (isError) return <h2> Error: {error.message} </h2>;
+  if (isError)
+    return (
+      <ErrorMessage
+        text="Failed to load products"
+        error={error.message}
+        refetch={refetch}
+      />
+    );
 
   return (
     <div className="lg:border-2 lg:border-border lg:p-4">
@@ -29,34 +25,46 @@ const Products = () => {
           <p className="text-gray-800"> View and manage your inventory </p>
         </div>
 
-        <span> 200 products </span>
+        {isLoading ? (
+          <div className="animate-pulse h-3 w-20 bg-gray-300"></div>
+        ) : (
+          <span> {data?.length} products </span>
+        )}
       </div>
 
-      <table className="hidden lg:block border-2">
-        <thead className="block py-3 border-b-2">
-          <tr className="flex items-center justify-between">
-            <th className="w-[25%] text-sm"> Product </th>
-            <th className="flex-1 text-sm"> SKU </th>
-            <th className="flex-1 text-sm"> Category </th>
-            <th className="flex-1 text-sm"> Price </th>
-            <th className="flex-1 text-sm"> Stock </th>
-            <th className="flex-1 text-sm"> Status </th>
-            <th className="flex-1 text-sm"> Last Updated </th>
-            <th className="flex-1 text-sm"> Actions </th>
+      <table className="hidden lg:table w-full table-fixed border-2">
+        <thead className="border-b-2">
+          <tr>
+            <th className="w-[25%] p-3 text-left text-sm">Product</th>
+            <th className="w-[12%] p-3 text-left text-sm">SKU</th>
+            <th className="w-[12%] p-3 text-left text-sm">Category</th>
+            <th className="w-[10%] p-3 text-left text-sm">Price</th>
+            <th className="w-[8%] p-3 text-left text-sm">Stock</th>
+            <th className="w-[11%] p-3 text-left text-sm">Status</th>
+            <th className="w-[12%] p-3 text-left text-sm">Last Updated</th>
+            <th className="w-[10%] p-3 text-left text-sm">Actions</th>
           </tr>
         </thead>
 
-        <tbody className="block">
-          {data?.map((product) => {
-            return <ProductItem key={product.id} product={product} />;
-          })}
-        </tbody>
+        {isLoading ? (
+          <TableLoader />
+        ) : (
+          <tbody className="divide-y-2">
+            {data?.map((product) => {
+              return <ProductItem key={product.id} product={product} />;
+            })}
+          </tbody>
+        )}
       </table>
 
       <ul className="sm:grid sm:grid-cols-2 sm:gap-4 space-y-6 sm:space-y-0 lg:hidden">
-        {data?.map((product) => {
-          return <ProductItemMobile key={product.id} product={product} />;
-        })}
+        {isLoading ? (
+          <CardLoader />
+        ) : (
+          data?.map((product) => {
+            return <ProductItemMobile key={product.id} product={product} />;
+          })
+        )}
       </ul>
     </div>
   );
