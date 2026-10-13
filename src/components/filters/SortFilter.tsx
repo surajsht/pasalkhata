@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import useOutsideClick from "../../hooks/useOutsideClick";
+import useProducts from "../../hooks/useProducts";
+import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
 
 const sortOptions = [
   "Newest First",
@@ -17,11 +19,14 @@ const SortFilter = () => {
   const [optionValue, setOptionValue] = useState<string>("Newest First");
 
   const { isOpen, setIsOpen, ref } = useOutsideClick();
+  const { isLoading } = useProducts();
 
   const handleOptionSelect = (value: string) => {
     setOptionValue(value);
     setIsOpen(false);
   };
+
+  if (isLoading) return <SwitchFilterLoader />;
 
   return (
     <div className="relative w-48" ref={ref}>

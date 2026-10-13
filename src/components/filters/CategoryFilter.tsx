@@ -1,19 +1,22 @@
 import { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import useOutsideClick from "../../hooks/useOutsideClick";
-
-const categoryOptions = [
-  "all categories",
-  "clothing",
-  "footwear",
-  "electronics",
-  "accessories",
-  "home & living",
-];
+import useProducts from "../../hooks/useProducts";
+import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
 
 const CategoryFilter = () => {
   const [optionValue, setOptionValue] = useState<string>("All Categories");
   const { isOpen, setIsOpen, ref } = useOutsideClick();
+
+  const { data, isLoading } = useProducts();
+
+  if (isLoading) return <SwitchFilterLoader />;
+
+  const getCategories =
+    data?.map((product) => {
+      return product.category;
+    }) || [];
+  const uniqueCategories = ["All Categories", ...new Set(getCategories)];
 
   const handleOptionSelect = (value: string) => {
     setOptionValue(value);
@@ -34,7 +37,7 @@ const CategoryFilter = () => {
       <ul
         className={`absolute left-0 right-0 top-full bg-white border-2 border-border rounded-md z-10 space-y-2 text-gray-700 ${isOpen ? "opacity-1 visible mt-2" : "opacity-0 invisible mt-0"} transition-all duration-300 ease-in-out shadow-md`}
       >
-        {categoryOptions.map((category, idx) => {
+        {uniqueCategories.map((category, idx) => {
           return (
             <li
               key={idx}
