@@ -3,7 +3,7 @@ import ProductItemMobile from "./ProductItemMobile";
 import CardLoader from "../skeleton-loader/CardLoader";
 import TableLoader from "../skeleton-loader/TableLoader";
 import ErrorMessage from "../ErrorMessage";
-import useProducts from "../hooks/useProducts";
+import useProducts from "../../hooks/useProducts";
 
 const Products = () => {
   const { data, isLoading, isError, error, refetch } = useProducts();
