@@ -7,6 +7,8 @@ type ProductStore = {
   setCategoryOption: (value: string) => void;
   stockStatus: string;
   setStockStatus: (value: string) => void;
+  sortBy: string;
+  setSortBy: (value: string) => void;
 };
 
 const useProductStore = create<ProductStore>((set) => ({
@@ -16,6 +18,8 @@ const useProductStore = create<ProductStore>((set) => ({
   setCategoryOption: (value) => set({ categoryOption: value }),
   stockStatus: "All stock",
   setStockStatus: (value) => set({ stockStatus: value }),
+  sortBy: "Newest First",
+  setSortBy: (value) => set({ sortBy: value }),
 }));
 
 export default useProductStore;

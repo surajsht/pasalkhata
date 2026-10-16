@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import useProducts from "../../hooks/useProducts";
 import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
+import useProductStore from "../../store/useProductStore";
 
 const sortOptions = [
   "Newest First",
@@ -16,13 +16,13 @@ const sortOptions = [
 ];
 
 const SortFilter = () => {
-  const [optionValue, setOptionValue] = useState<string>("Newest First");
-
+  const sortBy = useProductStore((state) => state.sortBy);
+  const setSortBy = useProductStore((state) => state.setSortBy);
   const { isOpen, setIsOpen, ref } = useOutsideClick();
   const { isLoading } = useProducts();
 
   const handleOptionSelect = (value: string) => {
-    setOptionValue(value);
+    setSortBy(value);
     setIsOpen(false);
   };
 
@@ -34,7 +34,7 @@ const SortFilter = () => {
         className="flex items-center justify-between gap-3 text-sm border-2 border-border px-4 py-2 text-gray-700 rounded-md hover:border-primary focus:outline-none focus:ring-1 focus:ring-primaryHover transition-colors w-full"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="text-gray-700"> {optionValue} </span>
+        <span className="text-gray-700"> {sortBy} </span>
 
         <MdOutlineKeyboardArrowDown className={`text-2xl text-gray-400`} />
       </button>
