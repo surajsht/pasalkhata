@@ -9,10 +9,13 @@ import useFilteredProducts from "../../hooks/useFilteredProducts";
 
 const Products = () => {
   const userQuery = useProductStore((state) => state.userQuery);
+  const categoryOption = useProductStore((state) => state.categoryOption);
   const debouncedValue = useDebounce(userQuery, 550);
 
-  const { data, isLoading, isError, error, refetch } =
-    useFilteredProducts(debouncedValue);
+  const { data, isLoading, isError, error, refetch } = useFilteredProducts({
+    searchQuery: debouncedValue,
+    categoryOption,
+  });
 
   if (isError)
     return (

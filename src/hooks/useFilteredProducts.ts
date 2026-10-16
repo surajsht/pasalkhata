@@ -3,22 +3,33 @@ import { supabase } from "../utils/supabase";
 
 type FilteredProducts = {
   searchQuery: string;
+  categoryOption: string;
 };
 
-const fetchFilteredProducts = async ({ searchQuery }: FilteredProducts) => {
+const fetchFilteredProducts = async ({
+  searchQuery,
+  categoryOption,
+}: FilteredProducts) => {
   let query = supabase.from("inventory-products").select("*");
 
   if (searchQuery.trim() !== "") {
     query = query.ilike("name", `%${searchQuery}%`);
   }
 
+  if (categoryOption !== "All Categories") {
+    query = query.eq("category", categoryOption);
+  }
+
   return await query;
 };
 
-const useFilteredProducts = (searchQuery: string) => {
+const useFilteredProducts = ({
+  searchQuery,
+  categoryOption,
+}: FilteredProducts) => {
   return useQuery({
-    queryKey: ["filtered-products", searchQuery],
-    queryFn: () => fetchFilteredProducts({ searchQuery }),
+    queryKey: ["filtered-products", searchQuery, categoryOption],
+    queryFn: () => fetchFilteredProducts({ searchQuery, categoryOption }),
   });
 };
 

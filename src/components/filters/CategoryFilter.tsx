@@ -1,11 +1,12 @@
-import { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import useProducts from "../../hooks/useProducts";
 import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
+import useProductStore from "../../store/useProductStore";
 
 const CategoryFilter = () => {
-  const [optionValue, setOptionValue] = useState<string>("All Categories");
+  const categoryOption = useProductStore((state) => state.categoryOption);
+  const setCategoryOption = useProductStore((state) => state.setCategoryOption);
   const { isOpen, setIsOpen, ref } = useOutsideClick();
 
   const { data, isLoading } = useProducts();
@@ -19,7 +20,7 @@ const CategoryFilter = () => {
   const uniqueCategories = ["All Categories", ...new Set(getCategories)];
 
   const handleOptionSelect = (value: string) => {
-    setOptionValue(value);
+    setCategoryOption(value);
     setIsOpen(false);
   };
 
@@ -29,7 +30,7 @@ const CategoryFilter = () => {
         className="flex items-center justify-between gap-3 text-sm border-2 border-border px-4 py-2 text-gray-700 rounded-md hover:border-primary focus:outline-none focus:ring-1 focus:ring-primaryHover transition-colors w-full"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="text-gray-700"> {optionValue} </span>
+        <span className="text-gray-700"> {categoryOption} </span>
 
         <MdOutlineKeyboardArrowDown className={`text-2xl text-gray-400`} />
       </button>
