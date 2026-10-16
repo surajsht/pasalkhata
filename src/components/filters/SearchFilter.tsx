@@ -1,9 +1,10 @@
-import { useState } from "react";
 import { IoSearch } from "react-icons/io5";
 import useProducts from "../../hooks/useProducts";
+import useProductStore from "../../store/useProductStore";
 
 const SearchFilter = () => {
-  const [userQuery, setUserQuery] = useState<string>("");
+  const userQuery = useProductStore((state) => state.userQuery);
+  const setUserQuery = useProductStore((state) => state.setUserQuery);
 
   const { isLoading } = useProducts();
 
