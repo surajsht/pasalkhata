@@ -1,24 +1,25 @@
-import { useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import useProducts from "../../hooks/useProducts";
 import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
+import useProductStore from "../../store/useProductStore";
 
 const stockStatusOptions = [
-  "all stock status",
-  "in stock",
-  "low stock",
-  "out of stock",
+  "All stock",
+  "In stock",
+  "Low stock",
+  "Out of stock",
 ];
 
 const StockStatusFilter = () => {
-  const [optionValue, setOptionValue] = useState<string>("all stock status");
+  const stockStatus = useProductStore((state) => state.stockStatus);
+  const setStockStatus = useProductStore((state) => state.setStockStatus);
 
   const { ref, isOpen, setIsOpen } = useOutsideClick();
   const { isLoading } = useProducts();
 
   const handleOptionSelect = (value: string) => {
-    setOptionValue(value);
+    setStockStatus(value);
     setIsOpen(false);
   };
 
@@ -30,7 +31,7 @@ const StockStatusFilter = () => {
         className="flex items-center justify-between gap-3 text-sm border-2 border-border px-4 py-2 text-gray-700 rounded-md hover:border-primary focus:outline-none focus:ring-1 focus:ring-primaryHover transition-colors w-full"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <span className="text-gray-700"> {optionValue} </span>
+        <span className="text-gray-700"> {stockStatus} </span>
 
         <MdOutlineKeyboardArrowDown className={`text-2xl text-gray-400`} />
       </button>

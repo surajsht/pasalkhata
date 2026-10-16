@@ -10,11 +10,13 @@ import useFilteredProducts from "../../hooks/useFilteredProducts";
 const Products = () => {
   const userQuery = useProductStore((state) => state.userQuery);
   const categoryOption = useProductStore((state) => state.categoryOption);
+  const stockStatus = useProductStore((state) => state.stockStatus);
   const debouncedValue = useDebounce(userQuery, 550);
 
   const { data, isLoading, isError, error, refetch } = useFilteredProducts({
     searchQuery: debouncedValue,
     categoryOption,
+    stockStatus,
   });
 
   if (isError)
@@ -37,7 +39,7 @@ const Products = () => {
         {isLoading ? (
           <div className="animate-pulse h-3 w-20 bg-gray-300"></div>
         ) : (
-          <span> {data?.data?.length} products </span>
+          <span> {data?.length} products </span>
         )}
       </div>
 
@@ -59,7 +61,7 @@ const Products = () => {
           <TableLoader />
         ) : (
           <tbody className="divide-y-2">
-            {data?.data?.map((product) => {
+            {data?.map((product) => {
               return <ProductItem key={product.id} product={product} />;
             })}
           </tbody>
@@ -70,7 +72,7 @@ const Products = () => {
         {isLoading ? (
           <CardLoader />
         ) : (
-          data?.data?.map((product) => {
+          data?.map((product) => {
             return <ProductItemMobile key={product.id} product={product} />;
           })
         )}
