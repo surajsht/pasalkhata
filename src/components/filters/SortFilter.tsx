@@ -42,14 +42,14 @@ const SortFilter = () => {
       <ul
         className={`absolute left-0 right-0 top-full bg-white border-2 border-border rounded-md z-10 space-y-2 text-gray-700 ${isOpen ? "opacity-1 visible mt-2" : "opacity-0 invisible mt-0"} transition-all duration-300 ease-in-out shadow-md`}
       >
-        {sortOptions.map((category, idx) => {
+        {sortOptions.map((sort, idx) => {
           return (
             <li
               key={idx}
-              className="hover:bg-primaryHover hover:text-white py-2 px-3 cursor-pointer"
-              onClick={() => handleOptionSelect(category)}
+              className={`hover:bg-primaryHover hover:text-white py-2 px-3 cursor-pointer ${sortBy === sort ? "bg-primary text-white" : "bg-transparent"}`}
+              onClick={() => handleOptionSelect(sort)}
             >
-              {category}
+              {sort}
             </li>
           );
         })}

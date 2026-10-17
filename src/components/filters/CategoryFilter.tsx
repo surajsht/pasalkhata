@@ -42,7 +42,7 @@ const CategoryFilter = () => {
           return (
             <li
               key={idx}
-              className="hover:bg-primaryHover hover:text-white py-2 px-3 cursor-pointer"
+              className={`hover:bg-primaryHover hover:text-white py-2 px-3 cursor-pointer ${categoryOption === category ? "bg-primary text-white" : "bg-transparent"}`}
               onClick={() => handleOptionSelect(category)}
             >
               {category}
