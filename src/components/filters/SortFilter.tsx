@@ -4,7 +4,7 @@ import useProducts from "../../hooks/useProducts";
 import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
 import useProductStore from "../../store/useProductStore";
 
-const sortOptions = [
+const sortOptions: string[] = [
   "Newest First",
   "Oldest First",
   "Name: A–Z",

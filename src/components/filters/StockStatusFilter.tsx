@@ -4,7 +4,7 @@ import useProducts from "../../hooks/useProducts";
 import SwitchFilterLoader from "../skeleton-loader/SwitchFilterLoader";
 import useProductStore from "../../store/useProductStore";
 
-const stockStatusOptions = [
+const stockStatusOptions: string[] = [
   "All stock",
   "In stock",
   "Low stock",

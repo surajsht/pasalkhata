@@ -1,11 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase";
 
-type FilteredProducts = {
+type FilteredProductsParams = {
   searchQuery: string;
   categoryOption: string;
   stockStatus: string;
   sortBy: string;
+};
+
+const sortConfig: Record<string, { column: string; ascending: boolean }> = {
+  "Price: Low to High": { column: "price", ascending: true },
+  "Price: High to Low": { column: "price", ascending: false },
+  "Name: A–Z": { column: "name", ascending: true },
+  "Name: Z–A": { column: "name", ascending: false },
+  "Stock: Low to High": { column: "stock", ascending: true },
+  "Stock: High to Low": { column: "stock", ascending: false },
+  "Newest First": { column: "created_at", ascending: false },
+  "Oldest First": { column: "created_at", ascending: true },
 };
 
 const fetchFilteredProducts = async ({
@@ -13,7 +24,7 @@ const fetchFilteredProducts = async ({
   categoryOption,
   stockStatus,
   sortBy,
-}: FilteredProducts) => {
+}: FilteredProductsParams) => {
   let query = supabase.from("inventory-products").select("*");
 
   if (searchQuery.trim() !== "") {
@@ -24,23 +35,12 @@ const fetchFilteredProducts = async ({
     query = query.eq("category", categoryOption);
   }
 
-  if (sortBy === "Price: Low to High") {
-    query = query.order("price", { ascending: true });
-  } else if (sortBy === "Price: High to Low") {
-    query = query.order("price", { ascending: false });
-  } else if (sortBy === "Name: A–Z") {
-    query = query.order("name", { ascending: true });
-  } else if (sortBy === "Name: Z–A") {
-    query = query.order("name", { ascending: false });
-  } else if (sortBy === "Stock: Low to High") {
-    query = query.order("stock", { ascending: true });
-  } else if (sortBy === "Stock: High to Low") {
-    query = query.order("stock", { ascending: false });
-  } else if (sortBy === "Newest First") {
-    query = query.order("created_at", { ascending: true });
-  } else {
-    query = query.order("created_at", { ascending: false });
-  }
+  const sortRule = sortConfig[sortBy] || {
+    column: "created_at",
+    ascending: false,
+  };
+
+  query = query.order(sortRule.column, { ascending: sortRule.ascending });
 
   const { data, error } = await query;
 
@@ -63,27 +63,17 @@ const fetchFilteredProducts = async ({
   return data;
 };
 
-const useFilteredProducts = ({
-  searchQuery,
-  categoryOption,
-  stockStatus,
-  sortBy,
-}: FilteredProducts) => {
+const useFilteredProducts = (params: FilteredProductsParams) => {
   return useQuery({
     queryKey: [
       "filtered-products",
-      searchQuery,
-      categoryOption,
-      stockStatus,
-      sortBy,
+      params.searchQuery,
+      params.categoryOption,
+      params.stockStatus,
+      params.sortBy,
     ],
-    queryFn: () =>
-      fetchFilteredProducts({
-        searchQuery,
-        categoryOption,
-        stockStatus,
-        sortBy,
-      }),
+    queryFn: () => fetchFilteredProducts(params),
+    staleTime: 1000 * 60 * 2,
   });
 };
 
