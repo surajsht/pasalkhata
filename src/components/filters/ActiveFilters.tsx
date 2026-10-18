@@ -26,10 +26,10 @@ const ActiveFilters = () => {
 
       <div className="flex items-center gap-4">
         {debouncedValue && (
-          <div className="flex items-center gap-3 border border-border bg-surface px-3 py-1 text-gray-700 rounded-md">
+          <div className="flex items-center gap-3 border border-primary bg-surface px-3 py-1 text-gray-700 rounded-md">
             <span className="text-sm font-medium"> {debouncedValue} </span>
             <button
-              className=" hover:text-primary"
+              className=" hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               onClick={() => {
                 setDebouncedValue("");
                 setUserQuery("");
@@ -41,10 +41,10 @@ const ActiveFilters = () => {
         )}
 
         {categoryOption !== "All Categories" && (
-          <div className="flex items-center gap-3 border border-border bg-surface px-3 py-1 text-gray-700 rounded-md">
+          <div className="flex items-center gap-3 border border-primary bg-surface px-3 py-1 text-gray-700 rounded-md">
             <span className="text-sm font-medium"> {categoryOption} </span>
             <button
-              className=" hover:text-primary"
+              className=" hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               onClick={() => setCategoryOption("All Categories")}
             >
               <IoCloseSharp />
@@ -53,10 +53,10 @@ const ActiveFilters = () => {
         )}
 
         {stockStatus !== "All stock" && (
-          <div className="flex items-center gap-3 border border-border bg-surface px-3 py-1 text-gray-700 rounded-md">
+          <div className="flex items-center gap-3 border border-primary bg-surface px-3 py-1 text-gray-700 rounded-md">
             <span className="text-sm font-medium"> {stockStatus} </span>
             <button
-              className=" hover:text-primary"
+              className=" hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               onClick={() => setStockStatus("All stock")}
             >
               <IoCloseSharp />
@@ -65,10 +65,10 @@ const ActiveFilters = () => {
         )}
 
         {sortBy !== "Newest First" && (
-          <div className="flex items-center gap-3 border border-border bg-surface px-3 py-1 text-gray-700 rounded-md">
+          <div className="flex items-center gap-3 border border-primary bg-surface px-3 py-1 text-gray-700 rounded-md">
             <span className="text-sm font-medium"> {sortBy} </span>
             <button
-              className=" hover:text-primary"
+              className=" hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               onClick={() => setSortBy("Newest First")}
             >
               <IoCloseSharp />

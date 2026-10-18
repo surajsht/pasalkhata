@@ -21,7 +21,7 @@ const FilterPopup = ({ isModalOpen, setIsModalOpen }: FilterPopupProp) => {
             </h2>
 
             <button
-              className="text-2xl bg-primary text-white p-1 rounded-md hover:bg-primaryHover"
+              className="text-xl bg-primary text-white p-1 rounded-md hover:bg-primaryHover"
               onClick={() => setIsModalOpen(false)}
             >
               <IoCloseSharp />

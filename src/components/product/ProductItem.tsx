@@ -8,16 +8,31 @@ type ProductItemType = {
 const ProductItem = ({ product }: ProductItemType) => {
   const productStock = product.stock;
   const threshold = product.low_stock_threshold ?? 0;
-  let stockStatus = "";
+  let stockStatus = {
+    status: "",
+    color: "",
+  };
 
   if (productStock === undefined) {
-    stockStatus = "Unknown";
+    stockStatus = {
+      status: "Unknown",
+      color: "bg-danger",
+    };
   } else if (productStock === 0) {
-    stockStatus = "Out Of Stock";
+    stockStatus = {
+      status: "Out Of Stock",
+      color: "bg-danger",
+    };
   } else if (productStock <= threshold) {
-    stockStatus = "Low Stock";
+    stockStatus = {
+      status: "Low Stock",
+      color: "bg-warning",
+    };
   } else {
-    stockStatus = "In Stock";
+    stockStatus = {
+      status: "In Stock",
+      color: "bg-success",
+    };
   }
 
   return (
@@ -35,7 +50,13 @@ const ProductItem = ({ product }: ProductItemType) => {
       <td className="w-[12%] p-3 text-left text-sm"> {product.category} </td>
       <td className="w-[10%] p-3 text-left text-sm"> Rs.{product.price} </td>
       <td className="w-[8%] p-3 text-left text-sm"> {product.stock} unit </td>
-      <td className="w-[11%] p-3 text-left text-sm">{stockStatus}</td>
+      <td className="w-[11%] p-3 text-left text-sm">
+        <span
+          className={`${stockStatus.color} text-white px-2 py-1 rounded-md`}
+        >
+          {stockStatus.status}
+        </span>
+      </td>
       <td className="w-[12%] p-3 text-left text-sm"> {product.updated_at} </td>
       <td className="w-[10%] p-3 text-left text-sm">
         <button>

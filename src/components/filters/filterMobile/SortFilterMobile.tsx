@@ -24,7 +24,7 @@ const SortFilterMobile = () => {
           return (
             <li key={idx}>
               <button
-                className={`text-sm font-medium hover:text-primary ${sortBy === sort ? "text-primary" : "text-gray-700"}`}
+                className={`text-sm font-medium border-2 border-border px-2 py-1 rounded-md hover:border-primary hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary ${sortBy === sort ? "text-primary border-primary" : "text-gray-700"}`}
                 onClick={() => setSortBy(sortBy)}
               >
                 {sort}
