@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import useProductStore from "../store/useProductStore";
 
 const useDebounce = (value: string, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState<string>("");
+  const debouncedValue = useProductStore((state) => state.debouncedValue);
+  const setDebouncedValue = useProductStore((state) => state.setDebouncedValue);
 
   useEffect(() => {
     let timer;
