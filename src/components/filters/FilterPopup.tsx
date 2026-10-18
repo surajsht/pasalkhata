@@ -13,8 +13,8 @@ const FilterPopup = ({ isModalOpen, setIsModalOpen }: FilterPopupProp) => {
     <div
       className={`${isModalOpen ? "opacity-100 visible" : "opacity-0 invisible"} fixed inset-0 h-screen w-screen bg-[rgba(0,0,0,.8)] z-20 transition-opacity duration-300 ease-in-out py-8 flex items-center justify-center lg:hidden`}
     >
-      <div className="container">
-        <div className="bg-white p-6 space-y-6 rounded-md">
+      <div className="container h-4/5">
+        <div className="bg-white p-6 space-y-6 h-full overflow-auto rounded-md">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold text-gray-700">
               Filter Products:

@@ -19,7 +19,7 @@ const SortFilterMobile = () => {
     <div className="space-y-4">
       <h2 className="text-lg font-semibold text-gray-700"> Sort by: </h2>
 
-      <ul className="flex items-center flex-wrap gap-x-6 gap-y-2">
+      <ul className="flex items-center flex-wrap gap-x-3 gap-y-2">
         {sortOptions.map((sort, idx) => {
           return (
             <li key={idx}>
