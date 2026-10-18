@@ -12,7 +12,7 @@ const useBodyScrollLock = ({ isOpen, setIsModalOpen }: BodyScrollProp) => {
     const previousOverflow = document.body.style.overflow;
 
     const handleWindowResize = () => {
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         document.body.style.overflow = previousOverflow;
         setIsModalOpen(false);
       }

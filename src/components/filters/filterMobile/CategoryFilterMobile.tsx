@@ -1,6 +1,10 @@
 import useProducts from "../../../hooks/useProducts";
+import useProductStore from "../../../store/useProductStore";
 
 const CategoryFilterMobile = () => {
+  const categoryOption = useProductStore((state) => state.categoryOption);
+  const setCategoryOption = useProductStore((state) => state.setCategoryOption);
+
   const { data, isLoading } = useProducts();
 
   if (isLoading) return <h3>Loading...</h3>;
@@ -12,14 +16,19 @@ const CategoryFilterMobile = () => {
   const uniqueCategories = ["All Categories", ...new Set(getCategories)];
 
   return (
-    <div>
-      <h2 className="text-lg font-medium text-gray-700"> Categories: </h2>
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold text-gray-700"> Categories: </h2>
 
-      <ul>
+      <ul className="flex items-center flex-wrap gap-x-6 gap-y-2">
         {uniqueCategories.map((category, idx) => {
           return (
             <li key={idx}>
-              <button>{category}</button>
+              <button
+                className={`text-sm font-medium hover:text-primary ${categoryOption === category ? "text-primary" : "text-gray-700"}`}
+                onClick={() => setCategoryOption(category)}
+              >
+                {category}
+              </button>
             </li>
           );
         })}

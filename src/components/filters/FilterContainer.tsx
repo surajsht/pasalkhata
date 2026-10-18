@@ -33,7 +33,10 @@ const FilterContainer = () => {
           <FaFilter />
         </button>
 
-        <FilterPopup isModalOpen={isModalOpen} />
+        <FilterPopup
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
       </div>
     )
   );
