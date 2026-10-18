@@ -24,7 +24,7 @@ const ActiveFilters = () => {
     <div className="mt-4 mb-6 flex items-center gap-2 flex-wrap">
       <h2 className="text-lg font-medium text-gray-700"> Filter by: </h2>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-x-4 gap-y-2 flex-wrap">
         {debouncedValue && (
           <div className="flex items-center gap-3 border border-primary bg-surface px-3 py-1 text-gray-700 rounded-md">
             <span className="text-sm font-medium"> {debouncedValue} </span>
