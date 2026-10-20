@@ -6,6 +6,7 @@ import ErrorMessage from "../ErrorMessage";
 import useDebounce from "../../hooks/useDebounce";
 import useProductStore from "../../store/useProductStore";
 import useFilteredProducts from "../../hooks/useFilteredProducts";
+import usePaginationStore from "../../store/usePaginationStore";
 
 const Products = () => {
   const userQuery = useProductStore((state) => state.userQuery);
@@ -13,12 +14,19 @@ const Products = () => {
   const stockStatus = useProductStore((state) => state.stockStatus);
   const sortBy = useProductStore((state) => state.sortBy);
   const debouncedValue = useDebounce(userQuery, 550);
+  const currentPage = usePaginationStore((state) => state.currentPage);
+  const dataPerPage = usePaginationStore((state) => state.dataPerPage);
+
+  const paginationStartIndex = (currentPage - 1) * dataPerPage;
+  const paginationEndIndex = currentPage * dataPerPage - 1;
 
   const { data, isLoading, isError, error, refetch } = useFilteredProducts({
     searchQuery: debouncedValue,
     categoryOption,
     stockStatus,
     sortBy,
+    paginationStartIndex,
+    paginationEndIndex,
   });
 
   if (isError)

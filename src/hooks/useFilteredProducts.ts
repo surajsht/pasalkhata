@@ -6,6 +6,8 @@ type FilteredProductsParams = {
   categoryOption: string;
   stockStatus: string;
   sortBy: string;
+  paginationStartIndex: number;
+  paginationEndIndex: number;
 };
 
 const sortConfig: Record<string, { column: string; ascending: boolean }> = {
@@ -24,8 +26,13 @@ const fetchFilteredProducts = async ({
   categoryOption,
   stockStatus,
   sortBy,
+  paginationStartIndex,
+  paginationEndIndex,
 }: FilteredProductsParams) => {
-  let query = supabase.from("inventory-products").select("*");
+  let query = supabase
+    .from("inventory-products")
+    .select("*")
+    .range(paginationStartIndex, paginationEndIndex);
 
   if (searchQuery.trim() !== "") {
     query = query.ilike("name", `%${searchQuery}%`);
@@ -71,6 +78,8 @@ const useFilteredProducts = (params: FilteredProductsParams) => {
       params.categoryOption,
       params.stockStatus,
       params.sortBy,
+      params.paginationStartIndex,
+      params.paginationEndIndex,
     ],
     queryFn: () => fetchFilteredProducts(params),
     staleTime: 1000 * 60 * 2,
