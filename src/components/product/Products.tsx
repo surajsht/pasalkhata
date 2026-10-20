@@ -73,7 +73,7 @@ const Products = ({
         )}
       </table>
 
-      {dataLength === 0 ? (
+      {!isLoading && dataLength === 0 ? (
         <p className="text-center mt-4 text-gray-700 font-medium">
           No products to show
         </p>
@@ -81,17 +81,15 @@ const Products = ({
         ""
       )}
 
-      {dataLength > 0 && (
-        <ul className="sm:grid sm:grid-cols-2 sm:gap-4 space-y-6 sm:space-y-0 lg:hidden">
-          {isLoading ? (
-            <CardLoader />
-          ) : (
-            data?.filteredData?.map((product) => {
-              return <ProductItemMobile key={product.id} product={product} />;
-            })
-          )}
-        </ul>
-      )}
+      <ul className="sm:grid sm:grid-cols-2 sm:gap-4 space-y-6 sm:space-y-0 lg:hidden">
+        {isLoading ? (
+          <CardLoader />
+        ) : (
+          data?.filteredData?.map((product) => {
+            return <ProductItemMobile key={product.id} product={product} />;
+          })
+        )}
+      </ul>
     </div>
   );
 };
