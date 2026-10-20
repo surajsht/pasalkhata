@@ -29,6 +29,8 @@ const Products = ({
       />
     );
 
+  const dataLength = data?.filteredData?.length || 0;
+
   return (
     <div className="lg:border-2 lg:border-border lg:p-4">
       <div className="sm:flex sm:items-center sm:justify-between sm:gap-2 mb-4">
@@ -60,24 +62,36 @@ const Products = ({
 
         {isLoading ? (
           <TableLoader />
-        ) : (
+        ) : dataLength > 0 ? (
           <tbody className="divide-y-2">
             {data?.filteredData?.map((product) => {
               return <ProductItem key={product.id} product={product} />;
             })}
           </tbody>
+        ) : (
+          ""
         )}
       </table>
 
-      <ul className="sm:grid sm:grid-cols-2 sm:gap-4 space-y-6 sm:space-y-0 lg:hidden">
-        {isLoading ? (
-          <CardLoader />
-        ) : (
-          data?.filteredData?.map((product) => {
-            return <ProductItemMobile key={product.id} product={product} />;
-          })
-        )}
-      </ul>
+      {dataLength === 0 ? (
+        <p className="text-center mt-4 text-gray-700 font-medium">
+          No products to show
+        </p>
+      ) : (
+        ""
+      )}
+
+      {dataLength > 0 && (
+        <ul className="sm:grid sm:grid-cols-2 sm:gap-4 space-y-6 sm:space-y-0 lg:hidden">
+          {isLoading ? (
+            <CardLoader />
+          ) : (
+            data?.filteredData?.map((product) => {
+              return <ProductItemMobile key={product.id} product={product} />;
+            })
+          )}
+        </ul>
+      )}
     </div>
   );
 };

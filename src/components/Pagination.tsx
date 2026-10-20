@@ -26,7 +26,8 @@ const Pagination = ({ data, isLoading, isError }: PaginationProps) => {
     setCurrentPage(currentPage + 1);
   };
 
-  if (isError) return null;
+  if (isError || totalPaginationPage === 0 || data?.filteredData?.length === 0)
+    return null;
 
   return (
     <div className="flex items-center justify-center gap-6 my-6">
