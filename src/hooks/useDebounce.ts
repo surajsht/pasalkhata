@@ -1,19 +1,17 @@
-import { useEffect } from "react";
-import useProductStore from "../store/useProductStore";
+import { useEffect, useState } from "react";
 
-const useDebounce = (value: string, delay: number) => {
-  const debouncedValue = useProductStore((state) => state.debouncedValue);
-  const setDebouncedValue = useProductStore((state) => state.setDebouncedValue);
+const useDebounce = (value: string, delay: number = 300) => {
+  const [debouncedValue, setDebouncedValue] = useState<string>(value);
 
   useEffect(() => {
-    let timer;
-
-    timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);
 
-    return () => clearTimeout(timer);
-  }, [value]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, delay]);
 
   return debouncedValue;
 };

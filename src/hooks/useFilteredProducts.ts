@@ -2,12 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase";
 
 type FilteredProductsParams = {
-  searchQuery: string;
+  debouncedValue: string;
   categoryOption: string;
   stockStatus: string;
   sortBy: string;
   paginationStartIndex: number;
   paginationEndIndex: number;
+  setCurrentPage: (pageNum: number) => void;
 };
 
 const sortConfig: Record<string, { column: string; ascending: boolean }> = {
@@ -22,20 +23,22 @@ const sortConfig: Record<string, { column: string; ascending: boolean }> = {
 };
 
 const fetchFilteredProducts = async ({
-  searchQuery,
+  debouncedValue,
   categoryOption,
   stockStatus,
   sortBy,
   paginationStartIndex,
   paginationEndIndex,
+  setCurrentPage,
 }: FilteredProductsParams) => {
   let query = supabase
     .from("inventory-products")
-    .select("*")
+    .select("*", { count: "exact" })
     .range(paginationStartIndex, paginationEndIndex);
 
-  if (searchQuery.trim() !== "") {
-    query = query.ilike("name", `%${searchQuery}%`);
+  if (debouncedValue.trim() !== "") {
+    setCurrentPage(1);
+    query = query.ilike("name", `%${debouncedValue}%`);
   }
 
   if (categoryOption !== "All Categories") {
@@ -49,32 +52,33 @@ const fetchFilteredProducts = async ({
 
   query = query.order(sortRule.column, { ascending: sortRule.ascending });
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
-  if (error || !data) return [];
+  if (error || !data) return { filteredData: [], count: 0 };
+
+  let resultData = data;
 
   if (stockStatus === "Out of stock") {
-    return data.filter((item) => item.stock === 0);
-  }
-
-  if (stockStatus === "Low stock") {
-    return data.filter(
+    resultData = data.filter((item) => item.stock === 0);
+  } else if (stockStatus === "Low stock") {
+    resultData = data.filter(
       (item) => item.stock > 0 && item.stock <= item.low_stock_threshold,
     );
+  } else if (stockStatus === "In stock") {
+    resultData = data.filter((item) => item.stock > item.low_stock_threshold);
   }
 
-  if (stockStatus === "In stock") {
-    return data.filter((item) => item.stock > item.low_stock_threshold);
-  }
-
-  return data;
+  return {
+    filteredData: resultData,
+    count: count ?? 0,
+  };
 };
 
 const useFilteredProducts = (params: FilteredProductsParams) => {
   return useQuery({
     queryKey: [
       "filtered-products",
-      params.searchQuery,
+      params.debouncedValue,
       params.categoryOption,
       params.stockStatus,
       params.sortBy,

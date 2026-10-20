@@ -1,9 +1,9 @@
+import useDebounce from "../../hooks/useDebounce";
 import useProductStore from "../../store/useProductStore";
 import { IoCloseSharp } from "react-icons/io5";
 
 const ActiveFilters = () => {
-  const debouncedValue = useProductStore((state) => state.debouncedValue);
-  const setDebouncedValue = useProductStore((state) => state.setDebouncedValue);
+  const userQuery = useProductStore((state) => state.userQuery);
   const setUserQuery = useProductStore((state) => state.setUserQuery);
   const categoryOption = useProductStore((state) => state.categoryOption);
   const setCategoryOption = useProductStore((state) => state.setCategoryOption);
@@ -11,6 +11,7 @@ const ActiveFilters = () => {
   const setStockStatus = useProductStore((state) => state.setStockStatus);
   const sortBy = useProductStore((state) => state.sortBy);
   const setSortBy = useProductStore((state) => state.setSortBy);
+  const debouncedValue = useDebounce(userQuery);
 
   if (
     !debouncedValue.trim() &&
@@ -31,7 +32,6 @@ const ActiveFilters = () => {
             <button
               className=" hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
               onClick={() => {
-                setDebouncedValue("");
                 setUserQuery("");
               }}
             >

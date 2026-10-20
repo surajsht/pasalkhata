@@ -1,16 +1,21 @@
-import useProducts from "../hooks/useProducts";
 import usePaginationStore from "../store/usePaginationStore";
+import type { FilteredProductsResponse } from "../types/filteredProductsResponse";
 import PaginationLoader from "./skeleton-loader/PaginationLoader";
 
-const Pagination = () => {
+type PaginationProps = {
+  data: FilteredProductsResponse | undefined;
+  isLoading: boolean;
+  isError: boolean;
+};
+
+const Pagination = ({ data, isLoading, isError }: PaginationProps) => {
   const currentPage = usePaginationStore((state) => state.currentPage);
   const setCurrentPage = usePaginationStore((state) => state.setCurrentPage);
   const dataPerPage = usePaginationStore((state) => state.dataPerPage);
-  const { data, isLoading, isError } = useProducts();
 
   if (isLoading) return <PaginationLoader />;
 
-  const totalDataNumber = data?.length || 0;
+  const totalDataNumber = data?.count || 0;
   const totalPaginationPage = Math.ceil(totalDataNumber / dataPerPage);
 
   const handlePrevClick = () => {

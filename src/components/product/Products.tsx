@@ -3,37 +3,28 @@ import ProductItemMobile from "./ProductItemMobile";
 import CardLoader from "../skeleton-loader/CardLoader";
 import TableLoader from "../skeleton-loader/TableLoader";
 import ErrorMessage from "../ErrorMessage";
-import useDebounce from "../../hooks/useDebounce";
-import useProductStore from "../../store/useProductStore";
-import useFilteredProducts from "../../hooks/useFilteredProducts";
-import usePaginationStore from "../../store/usePaginationStore";
+import type { FilteredProductsResponse } from "../../types/filteredProductsResponse";
 
-const Products = () => {
-  const userQuery = useProductStore((state) => state.userQuery);
-  const categoryOption = useProductStore((state) => state.categoryOption);
-  const stockStatus = useProductStore((state) => state.stockStatus);
-  const sortBy = useProductStore((state) => state.sortBy);
-  const debouncedValue = useDebounce(userQuery, 550);
-  const currentPage = usePaginationStore((state) => state.currentPage);
-  const dataPerPage = usePaginationStore((state) => state.dataPerPage);
+type ProductsProps = {
+  data: FilteredProductsResponse | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  error: Error | null;
+  refetch: () => void;
+};
 
-  const paginationStartIndex = (currentPage - 1) * dataPerPage;
-  const paginationEndIndex = currentPage * dataPerPage - 1;
-
-  const { data, isLoading, isError, error, refetch } = useFilteredProducts({
-    searchQuery: debouncedValue,
-    categoryOption,
-    stockStatus,
-    sortBy,
-    paginationStartIndex,
-    paginationEndIndex,
-  });
-
+const Products = ({
+  data,
+  isLoading,
+  isError,
+  error,
+  refetch,
+}: ProductsProps) => {
   if (isError)
     return (
       <ErrorMessage
         text="Failed to load products"
-        error={error.message}
+        error={(error as Error)?.message}
         refetch={refetch}
       />
     );
@@ -49,7 +40,7 @@ const Products = () => {
         {isLoading ? (
           <div className="animate-pulse h-3 w-20 bg-gray-300"></div>
         ) : (
-          <span> {data?.length} products </span>
+          <span> {data?.filteredData?.length} products </span>
         )}
       </div>
 
@@ -71,7 +62,7 @@ const Products = () => {
           <TableLoader />
         ) : (
           <tbody className="divide-y-2">
-            {data?.map((product) => {
+            {data?.filteredData?.map((product) => {
               return <ProductItem key={product.id} product={product} />;
             })}
           </tbody>
@@ -82,7 +73,7 @@ const Products = () => {
         {isLoading ? (
           <CardLoader />
         ) : (
-          data?.map((product) => {
+          data?.filteredData?.map((product) => {
             return <ProductItemMobile key={product.id} product={product} />;
           })
         )}
