@@ -1,5 +1,6 @@
 import type { ProductDataType } from "../../TempData";
 import { BsThreeDots } from "react-icons/bs";
+import dateFormatter from "../../helper/dateFormatter";
 
 type ProductItemType = {
   product: Partial<ProductDataType>;
@@ -35,6 +36,8 @@ const ProductItem = ({ product }: ProductItemType) => {
     };
   }
 
+  const formattedDate = dateFormatter(product.updated_at);
+
   return (
     <tr className="p-2">
       <td className="w-full p-3 text-left text-sm flex items-center gap-3">
@@ -57,7 +60,7 @@ const ProductItem = ({ product }: ProductItemType) => {
           {stockStatus.status}
         </span>
       </td>
-      <td className="w-[12%] p-3 text-left text-sm"> {product.updated_at} </td>
+      <td className="w-[12%] p-3 text-left text-sm"> {formattedDate} </td>
       <td className="w-[10%] p-3 text-left text-sm">
         <button>
           <BsThreeDots />
