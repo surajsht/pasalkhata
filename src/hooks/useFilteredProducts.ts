@@ -18,8 +18,8 @@ const sortConfig: Record<string, { column: string; ascending: boolean }> = {
   "Name: Z–A": { column: "name", ascending: false },
   "Stock: Low to High": { column: "stock", ascending: true },
   "Stock: High to Low": { column: "stock", ascending: false },
-  "Newest First": { column: "created_at", ascending: false },
-  "Oldest First": { column: "created_at", ascending: true },
+  "Newest First": { column: "updated_at", ascending: false },
+  "Oldest First": { column: "updated_at", ascending: true },
 };
 
 const fetchFilteredProducts = async ({
@@ -46,11 +46,13 @@ const fetchFilteredProducts = async ({
   }
 
   const sortRule = sortConfig[sortBy] || {
-    column: "created_at",
+    column: "updated_at",
     ascending: false,
   };
 
   query = query.order(sortRule.column, { ascending: sortRule.ascending });
+
+  console.log(sortRule);
 
   const { data, error, count } = await query;
 

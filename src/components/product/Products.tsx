@@ -11,6 +11,7 @@ type ProductsProps = {
   isError: boolean;
   error: Error | null;
   refetch: () => void;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Products = ({
@@ -19,6 +20,7 @@ const Products = ({
   isError,
   error,
   refetch,
+  setIsOpen,
 }: ProductsProps) => {
   if (isError)
     return (
@@ -65,7 +67,13 @@ const Products = ({
         ) : dataLength > 0 ? (
           <tbody className="divide-y-2">
             {data?.filteredData?.map((product) => {
-              return <ProductItem key={product.id} product={product} />;
+              return (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  setIsOpen={setIsOpen}
+                />
+              );
             })}
           </tbody>
         ) : (

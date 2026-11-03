@@ -1,12 +1,15 @@
 import type { ProductDataType } from "../../TempData";
-import { BsThreeDots } from "react-icons/bs";
 import dateFormatter from "../../helper/dateFormatter";
+import { TbEdit } from "react-icons/tb";
+import useProductStore from "../../store/useProductStore";
 
 type ProductItemType = {
   product: Partial<ProductDataType>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ProductItem = ({ product }: ProductItemType) => {
+const ProductItem = ({ product, setIsOpen }: ProductItemType) => {
+  const setEditId = useProductStore((state) => state.setEditId);
   const productStock = product.stock;
   const threshold = product.low_stock_threshold ?? 0;
   let stockStatus = {
@@ -62,8 +65,16 @@ const ProductItem = ({ product }: ProductItemType) => {
       </td>
       <td className="w-[12%] p-3 text-left text-sm"> {formattedDate} </td>
       <td className="w-[10%] p-3 text-left text-sm">
-        <button>
-          <BsThreeDots />
+        <button
+          className="flex items-center gap-2 text-sm hover:text-primary"
+          onClick={(e) => {
+            e.stopPropagation();
+            setEditId(product.id || null);
+            setIsOpen(true);
+          }}
+        >
+          <TbEdit />
+          Edit
         </button>
       </td>
     </tr>

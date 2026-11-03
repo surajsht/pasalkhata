@@ -1,9 +1,11 @@
 import ActiveFilters from "../components/filters/ActiveFilters";
 import FilterContainer from "../components/filters/FilterContainer";
 import Pagination from "../components/Pagination";
+import EditPopup from "../components/product/EditPopup";
 import Products from "../components/product/Products";
 import useDebounce from "../hooks/useDebounce";
 import useFilteredProducts from "../hooks/useFilteredProducts";
+import useOutsideClick from "../hooks/useOutsideClick";
 import usePaginationStore from "../store/usePaginationStore";
 import useProductStore from "../store/useProductStore";
 
@@ -30,6 +32,8 @@ const ProductsPage = () => {
     setCurrentPage,
   });
 
+  const { isOpen, setIsOpen, ref } = useOutsideClick();
+
   return (
     <div>
       <FilterContainer />
@@ -40,8 +44,10 @@ const ProductsPage = () => {
         isError={isError}
         error={error}
         refetch={refetch}
+        setIsOpen={setIsOpen}
       />
       <Pagination data={data} isLoading={isLoading} isError={isError} />
+      <EditPopup isOpen={isOpen} setIsOpen={setIsOpen} modalRef={ref} />
     </div>
   );
 };
