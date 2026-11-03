@@ -22,7 +22,7 @@ const useProductStore = create<ProductStore>((set) => ({
   setStockStatus: (value) => set({ stockStatus: value }),
   sortBy: "Newest First",
   setSortBy: (value) => set({ sortBy: value }),
-  editId: "",
+  editId: null,
   setEditId: (id) => set({ editId: id }),
 }));
 

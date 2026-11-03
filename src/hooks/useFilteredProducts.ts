@@ -52,8 +52,6 @@ const fetchFilteredProducts = async ({
 
   query = query.order(sortRule.column, { ascending: sortRule.ascending });
 
-  console.log(sortRule);
-
   const { data, error, count } = await query;
 
   if (error || !data) return { filteredData: [], count: 0 };

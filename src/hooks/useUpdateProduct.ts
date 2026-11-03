@@ -10,6 +10,8 @@ type UpdateProductParams = {
     brand: string;
     sku: string;
     description: string;
+    stock: number | string;
+    low_stock_threshold: number | string;
     updated_at: string;
   };
 };

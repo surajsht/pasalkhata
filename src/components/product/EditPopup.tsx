@@ -29,20 +29,22 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
     brand: "",
     sku: "",
     description: "",
+    stock: "",
+    low_stock_threshold: "",
     updated_at: "",
   });
-
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     if (data) {
       setFormData({
         name: data.name || "",
-        price: data.price || "",
+        price: data.price ?? "",
         category: data.category || "",
         brand: data.brand || "",
         sku: data.sku || "",
         description: data.description || "",
+        stock: data.stock ?? "",
+        low_stock_threshold: data.low_stock_threshold ?? "",
         updated_at: data.updated_at || "",
       });
     }
@@ -51,7 +53,6 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
   useEffect(() => {
     if (!isOpen) {
       setEditId(null);
-      setImagePreview(null);
       setShowConfirm(false);
     }
   }, [isOpen, setEditId]);
@@ -71,13 +72,16 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
     }));
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-    }
-  };
+  const numericFieldsValid = [
+    formData.price,
+    formData.stock,
+    formData.low_stock_threshold,
+  ].every(
+    (value) =>
+      value !== "" && Number.isFinite(Number(value)) && Number(value) >= 0,
+  );
+
+  const isFormValid = formData.name.trim() !== "" && numericFieldsValid;
 
   const handleDelete = () => {
     if (!editId) return;
@@ -91,12 +95,17 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
   };
 
   const handleSave = () => {
-    if (!editId) return;
+    if (!editId || !isFormValid) return;
 
     updateProduct(
       {
         id: editId,
-        updatedData: formData,
+        updatedData: {
+          ...formData,
+          price: Number(formData.price),
+          stock: Number(formData.stock),
+          low_stock_threshold: Number(formData.low_stock_threshold),
+        },
       },
       {
         onSuccess: () => {
@@ -131,20 +140,9 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
             <div className="w-full md:w-1/3 flex flex-col items-center gap-3">
               <div className="w-full h-48 rounded-lg bg-gray-100 flex items-center justify-center border border-border overflow-hidden">
                 <img
-                  src={imagePreview || data?.image_url}
+                  src={data?.image_url}
                   alt="Product Preview"
                   className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="w-full">
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Select Image from Device
-                </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="w-full text-xs text-gray-500 file:mr-4 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                 />
               </div>
             </div>
@@ -160,6 +158,7 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Product Name"
+                  required
                   className="w-full px-3 py-1.5 text-sm border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
@@ -175,6 +174,8 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
                     value={formData.price}
                     onChange={handleChange}
                     placeholder="$0.00"
+                    min="0"
+                    required
                     className="w-full px-3 py-1.5 text-sm border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                 </div>
@@ -222,6 +223,39 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
                 </div>
               </div>
 
+              <div className="flex gap-3">
+                <div className="w-1/2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Stock
+                  </label>
+                  <input
+                    type="number"
+                    name="stock"
+                    value={formData.stock}
+                    onChange={handleChange}
+                    placeholder="0"
+                    min="0"
+                    required
+                    className="w-full px-3 py-1.5 text-sm border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="w-1/2">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Low Stock Threshold
+                  </label>
+                  <input
+                    type="number"
+                    name="low_stock_threshold"
+                    value={formData.low_stock_threshold}
+                    onChange={handleChange}
+                    placeholder="0"
+                    min="0"
+                    required
+                    className="w-full px-3 py-1.5 text-sm border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   Description
@@ -248,7 +282,7 @@ const EditPopup = ({ isOpen, setIsOpen, modalRef }: EditPopupProp) => {
             </button>
             <button
               onClick={handleSave}
-              disabled={isPending}
+              disabled={isPending || !isFormValid}
               className="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primaryHover rounded disabled:opacity-50"
             >
               {isPending ? "Saving..." : "Save"}
